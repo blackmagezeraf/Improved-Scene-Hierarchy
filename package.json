@@ -1,0 +1,10 @@
+{
+    "name": "com.alihussainabid.improvedscenehierarchy",
+    "version": "1.0.0",
+    "displayName": "Improved Scene Hierarchy",
+    "description": "Adds icons in the scene hierarchy for better visual identification of GameObjects",
+    "author": {
+        "name": "Ali Hussain Abid",
+        "email": "alihussainabid@hotmail.com"
+    }
+}
