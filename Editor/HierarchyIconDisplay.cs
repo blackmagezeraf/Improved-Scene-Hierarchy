@@ -4,26 +4,25 @@ using System;
 using System.Linq;
 
 namespace ImprovedSceneHierarchy {
-
     [InitializeOnLoad]
     public static class HierarchyIconDisplay {
-        static bool _hierarchyHasFocus = false;
-        static EditorWindow _hierarchyEditorWindow;
+        static bool         hierarchyHasFocus = false;
+        static EditorWindow hierarchyEditorWindow;
 
         static HierarchyIconDisplay() {
             EditorApplication.hierarchyWindowItemOnGUI += OnHierarchyWindowItemOnGUI;
-            EditorApplication.update += OnEditorUpdate;
+            EditorApplication.update                   += OnEditorUpdate;
         }
 
         private static void OnEditorUpdate() {
-            if (_hierarchyHasFocus)
-                _hierarchyEditorWindow = EditorWindow.GetWindow(Type.GetType("UnityEditor.SceneHierarchyWindow, UnityEditor"));
+            if (hierarchyHasFocus)
+                hierarchyEditorWindow = EditorWindow.GetWindow(Type.GetType("UnityEditor.SceneHierarchyWindow, UnityEditor"));
 
-            _hierarchyHasFocus = EditorWindow.focusedWindow != null && EditorWindow.focusedWindow == _hierarchyEditorWindow;
+            hierarchyHasFocus = EditorWindow.focusedWindow != null && EditorWindow.focusedWindow == hierarchyEditorWindow;
         }
 
         private static void OnHierarchyWindowItemOnGUI(int instanceID, Rect selectionRect) {
-            GameObject obj = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
+            GameObject obj = EditorUtility.EntityIdToObject(instanceID) as GameObject;
             if (obj == null)
                 return;
 
@@ -39,18 +38,18 @@ namespace ImprovedSceneHierarchy {
             Type type = component.GetType();
 
             GUIContent content = EditorGUIUtility.ObjectContent(component, type);
-            content.text = null;
+            content.text    = null;
             content.tooltip = type.Name;
 
             if (content.image == null)
                 return;
 
-            bool isSelected = Selection.instanceIDs.Contains(instanceID);
-            bool isHovered = selectionRect.Contains(Event.current.mousePosition);
-            bool isFocused = _hierarchyHasFocus;
+            bool isSelected = Selection.entityIds.Contains(instanceID);
+            bool isHovered  = selectionRect.Contains(Event.current.mousePosition);
+            bool isFocused  = hierarchyHasFocus;
 
-            Color color = UnityEditorBackgroundColor.Get(isSelected, isHovered, isFocused);
-            Rect backgroundRect = selectionRect;
+            Color color          = UnityEditorBackgroundColor.Get(isSelected, isHovered, isFocused);
+            Rect  backgroundRect = selectionRect;
             backgroundRect.width = 18f;
 
             EditorGUI.DrawRect(backgroundRect, color);
